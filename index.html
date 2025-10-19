@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Garry's Mod Server - Loading</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: url('image1.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #ffffff;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      align-items: center;
+      position: relative;
+      transition: background-image 1s ease;
+    }
+
+    .progress-container {
+    width: 80%;
+    max-width: 100%;
+    height: 25px; /* было 25px */
+    background-color: transparent;
+    border: 3px solid black;
+    border-radius: 15px;
+    overflow: hidden;
+    margin-bottom: 30px; /* было 10px — подняли выше на 30px */
+    }
+
+    .progress-bar {
+    height: 100%;
+    width: 0%;
+    background-color: #00cf15; /* Однотонный цвет */
+    transition: width 0.1s ease;
+    }
+
+    .progress-text {
+    font-size: 40px;       /* было 20px */
+    margin-bottom: 30px;   /* было 40px — теперь выше на 20px */
+    }
+
+    .rules {
+      position: absolute;
+      top: 20px;
+      max-width: 400px;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 15px;
+      border-radius: 40px;
+    }
+
+    .staff {
+      position: absolute;
+      top: 20px;
+      max-width: 400px;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 15px;
+      border-radius: 40px;
+    }
+
+    .rules { left: 20px; }
+    .staff { right: 20px; }
+
+    .rules h2 {
+      margin-bottom: 20px;
+    }
+
+    .staff h2 {
+      margin-bottom: 20px;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    li {
+      margin: 5px 0;
+    }
+
+    .server-title {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 48px; /* Увеличенный размер шрифта */
+      font-weight: bold;
+      text-align: center;
+      width: 30%;
+      z-index: 10;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 10px 10px;
+      border-radius: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="server-title">Russian Heimer PROJECT</div>
+  <div class="progress-container">
+    <div class="progress-bar" id="progress-bar"></div>
+  </div>
+  <div class="progress-text" id="progress">0%</div>
+
+  <div class="rules">
+    <h1>Правила игрового/ых сервера/ов</h1>
+    <ul>
+      <li>6 - Игровой сервер:</li>
+      <li>↓</li>
+      <li>6.1 - Запрещено кидать троллейбусы физганом.(правило устарело)</li>
+      <li>6.1.1 - Запрещено бить кулаками чужой троллейбус.</li>
+      <li>6.2 - Запрещено намерено нарушать правила ПДД.</li>
+      <li>6.3 - Запрещено оскорблять игроков, будь то прямым или косвенным образом.</li>
+      <li>6.4 - Запрещено поднимать штанги дистанционно в неположенном месте, разрешено только под ловушками!!!</li>
+      <li>6.5 - Запрещено использовать АХ на обычных троллейбусах (только если необходимо объехать аварийную ситуацию) для туашных маршрутов, либо проезда до конечных/депо.</li>
+      <li>6.6 - Запрещено спавнить троллейбусы вне парка(депо) или конечных (разрешается спавн ТБ на любых остановках, если это не мешает сзади едущему ТБ).</li>
+    </ul>
+  </div>
+
+  <div class="staff">
+    <h1>Персонал проекта</h1>
+    <ul>
+      <li>Основатель проекта - kombekdit04</li>
+      <li>Гл. Администратор - Zyjz, nds2603_rus</li>
+      <li>Зам. Гл. Администратора - topaz62_1</li>
+      <li>Модераторы - 𝓜𝓸𝓻𝓽𝓲,<br>borkobakardjiev, Drunk Driver,<br>I’m Dydnik, viers.zz, Shavermick,<br>FlightPro
+    </li>
+    </ul>
+  </div>
+
+    <script>
+        let progress = 0;
+        const target = 90;
+        const final = 99;
+        const durationTo90 = 10000; // 10 секунд до 90%
+        const waitDuration = 10000; // ждать 10 секунд на 90%
+        const durationTo100 = 1000; // 1 секунда от 90% до 100%
+
+        const progressText = document.getElementById("progress");
+        const progressBar = document.getElementById("progress-bar");
+
+        let intervalTo90 = durationTo90 / target;
+        let progressInterval = setInterval(() => {
+        if (progress >= target) {
+            clearInterval(progressInterval);
+            // Ждем 10 секунд на 90%
+            setTimeout(() => {
+            // Плавно добираем до 100%
+            let remaining = final - target;
+            let intervalToFinal = durationTo100 / remaining;
+            let finalInterval = setInterval(() => {
+                if (progress >= final) {
+                clearInterval(finalInterval);
+                return;
+                }
+                progress++;
+                progressText.textContent = progress + "%";
+                progressBar.style.width = progress + "%";
+            }, intervalToFinal);
+            }, waitDuration);
+            return;
+        }
+        progress++;
+        progressText.textContent = progress + "%";
+        progressBar.style.width = progress + "%";
+        }, intervalTo90);
+
+        const backgrounds = ['image1.jpg', 'image2.jpg', 'image3.jpg'];
+        let currentBackground = 0;
+        setInterval(() => {
+        currentBackground = (currentBackground + 1) % backgrounds.length;
+        document.body.style.backgroundImage = `url('${backgrounds[currentBackground]}')`;
+        }, 10000); // меняем каждые 10 секунд
+    </script>
+</body>
+</html>
